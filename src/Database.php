@@ -24,7 +24,7 @@ class Database
 
     public function getCountRows(string $tableName, string $where = '', array $values = []): int
     {
-        $sql = 'SELECT COUNT (`id`) as `count` FROM ' . getTableName($tableName);
+        $sql = 'SELECT COUNT(`id`) as `count` FROM ' . $this->getTableName($tableName);
         if ($where) $sql .= " WHERE $where";
         $query = $this->pdo->prepare($sql);
         $query->execute($values);
@@ -36,9 +36,9 @@ class Database
         return '`' . DB_PREFIX . $tableName . '`';
     }
 
-    public function getRows(string $tableName, string $where = '', array $values = [], string $orderBy = ''): int
+    public function getRows(string $tableName, string $where = '', array $values = [], string $orderBy = ''): array
     {
-        $sql = 'SELECT * FROM ' . getTableName($tableName);
+        $sql = 'SELECT * FROM ' . $this->getTableName($tableName);
         if ($where) $sql .= " WHERE $where";
         if ($orderBy) $sql .= " ORDER BY $orderBy";
         $query = $this->pdo->prepare($sql);
@@ -46,9 +46,9 @@ class Database
         return $query->fetchAll();
     }
 
-    public function getRowsByWhere(string $tableName, string $where, array  $values = []): array
+    public function getRowsByWhere(string $tableName, string $where = '', array  $values = [], string $orderBy = ''): array
     {
-        $sql = 'SELECT * FROM ' . getTableName($tableName) . " WHERE $where";
+        $sql = 'SELECT * FROM ' . $this->getTableName($tableName) . " WHERE $where";
         $query = $this->pdo->prepare($sql);
         $query->execute($values);
         $result = $query->fetch();
@@ -64,7 +64,7 @@ class Database
     public function getRowsByIds(string $tableName, array $ids): array
     {
         $in = str_repeat('?,', count($ids) - 1) . '?';
-        $sql = 'SELECT * FROM ' . getTableName($tableName) . " WHERE `id` IN ($in)";
+        $sql = 'SELECT * FROM ' . $this->getTableName($tableName) . " WHERE `id` IN ($in)";
         $query = $this->pdo->prepare($sql);
         $query->execute($ids);
         $result = [];
