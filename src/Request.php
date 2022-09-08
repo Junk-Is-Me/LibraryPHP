@@ -9,6 +9,7 @@ class Request
         $this->data = $this->xss($_REQUEST);
     }
 
+    
     public function __get(string $name): mixed
     {
         if (isset($this->data[$name])) return $this->data[$name];
@@ -19,6 +20,7 @@ class Request
     {
         return isset($this->data[$name]);
     }
+
 
     private function xss(array|string $data): array|string
     {

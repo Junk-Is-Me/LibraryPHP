@@ -12,7 +12,7 @@
     <div style="float: left;">
         <h4>Меню сайта</h4>
         <ul>
-            <li><a href="index.php" Главная страница>Главная страница</a>
+            <li><a href="/">Главная страница</a>
             </li>
             <li><a href="books.php">Книги</a>
             </li>
