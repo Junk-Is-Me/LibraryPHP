@@ -10,6 +10,27 @@
 
 <body>
     <div style="float: left;">
+        <?php if ($auth_user) { ?>
+            <p>Здравствуйте, <?= $auth_user['name'] ?></p>
+        <?php } else { ?>
+            <form name="auth" action="" method="POST">
+                <h4>Вход на сайт</h4>
+                <?php if ($error) { ?>
+                    <p style="color: #c00;">Неверные логин или пароль</p>
+                <?php } ?>
+                <p>
+                    <label>Логин:</label>
+                    <input type="text" name="login">
+                </p>
+                <p>
+                    <label>Пароль:</label>
+                    <input type="password" name="password">
+                </p>
+                <p>
+                    <input type="submit" name="auth" value="Войти на сайт">
+                </p>
+            </form>
+        <?php } ?>
         <h4>Меню сайта</h4>
         <ul>
             <li><a href="/">Главная страница</a>

@@ -15,5 +15,4 @@ if (is_numeric($id)) {
         echo exit;
     }
 }
-header('Location: 404.php');
-exit;
+to404();

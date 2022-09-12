@@ -46,7 +46,7 @@ class Database
         return $query->fetchAll();
     }
 
-    public function getRowsByWhere(string $tableName, string $where = '', array  $values = [], string $orderBy = ''): array
+    public function getRowByWhere(string $tableName, string $where = '', array  $values = [], string $orderBy = ''): array
     {
         $sql = 'SELECT * FROM ' . $this->getTableName($tableName) . " WHERE $where";
         $query = $this->pdo->prepare($sql);
@@ -58,7 +58,7 @@ class Database
 
     public function getRowById(string $tableName, int $id): array
     {
-        return $this->getRowsByWhere($tableName, ' id = ?', [$id]);
+        return $this->getRowByWhere($tableName, ' id = ?', [$id]);
     }
 
     public function getRowsByIds(string $tableName, array $ids): array
