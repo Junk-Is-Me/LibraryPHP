@@ -63,15 +63,18 @@ class Database
 
     public function getRowsByIds(string $tableName, array $ids): array
     {
-        $in = str_repeat('?,', count($ids) - 1) . '?';
-        $sql = 'SELECT * FROM ' . $this->getTableName($tableName) . " WHERE `id` IN ($in)";
-        $query = $this->pdo->prepare($sql);
-        $query->execute($ids);
-        $result = [];
-        foreach ($query->fetchAll() as $row) {
-            $result[$row['id']] = $row;
+        if ($ids) {
+            $in = str_repeat('?,', count($ids) - 1) . '?';
+            $sql = 'SELECT * FROM ' . $this->getTableName($tableName) . " WHERE `id` IN ($in)";
+            $query = $this->pdo->prepare($sql);
+            $query->execute($ids);
+            $result = [];
+            foreach ($query->fetchAll() as $row) {
+                $result[$row['id']] = $row;
+            }
+            return $result;
         }
-        return $result;
+        return [];
     }
 
     public function update(string $tableName, array $fields, array $values, string $where = '', array $whereValues = [])

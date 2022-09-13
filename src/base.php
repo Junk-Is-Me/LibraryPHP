@@ -8,6 +8,12 @@ function to404()
     exit;
 }
 
+function to403()
+{
+    header('Location: 403.php');
+    exit;
+}
+
 $db = Database::getDBO();
 $request = new Request();
 require_once "src/auth.php";

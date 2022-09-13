@@ -39,6 +39,14 @@
             </li>
             <li> <a href="authors.php">Авторы</a>
             </li>
+            <?php if ($auth_user) { ?>
+                <li>
+                    <a href="mybooks.php">Мои книги</a>
+                </li>
+                <li>
+                    <a href="?<?= http_build_query(array_merge($_GET, ['logout' => 1])) ?>">Выход</a>
+                </li>
+            <?php } ?>
         </ul>
     </div>
     <div style="margin-left: 300px;"><?php require_once "html/$content.php"; ?></div>
