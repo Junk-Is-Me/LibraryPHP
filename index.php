@@ -1,14 +1,14 @@
 <?php
-
-require_once 'src/base.php';
-
-$title = 'Библиотека';
-$content = 'index';
-
-$books = $db->getCountRows('books');
-$books_copies = $db->getCountRows('book_copies');
-$authors = $db->getCountRows('authors');
-$users = $db->getCountRows('users');
-$book_copies_avaliable = $db->getCountRows('book_copies', '`return_date` IS NULL');
-
-require_once 'html/main.php';
+    require_once 'src/Base.php';
+    
+    $title = 'Библиотека';
+    $content = 'index';
+    
+    $books = $db->getCountRows('books');
+    $book_copies = $db->getCountRows('book_copies');
+    $book_copies_available = $db->getCountRows('book_copies', '`return_date` IS NULL');
+    $authors = $db->getCountRows('authors');
+    $users = $db->getCountRows('users');
+    
+    require_once 'html/main.php';
+?>

@@ -1,8 +1,9 @@
 <?php
-require_once 'config.php';
+require_once 'Config.php';
 
 class Database
 {
+
     private static $db;
     private $pdo;
 
@@ -11,7 +12,7 @@ class Database
         try {
             $this->pdo = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME, DB_USER, DB_PASSWORD);
         } catch (PDOException $e) {
-            echo 'Ошибка при подключении к базе данных ' . $e->getMessage();
+            echo 'Ошибка при подключении к базе данных: ' . $e->getMessage();
         }
     }
 
@@ -21,34 +22,33 @@ class Database
         return self::$db;
     }
 
-
-    public function getCountRows(string $tableName, string $where = '', array $values = []): int
+    public function getCountRows(string $table_name, string $where = '', array $values = []): int
     {
-        $sql = 'SELECT COUNT(`id`) as `count` FROM ' . $this->getTableName($tableName);
+        $sql = 'SELECT COUNT(`id`) as `count` FROM ' . $this->getTableName($table_name);
         if ($where) $sql .= " WHERE $where";
         $query = $this->pdo->prepare($sql);
         $query->execute($values);
         return $query->fetchColumn();
     }
 
-    private function getTableName(string $tableName): string
+    private function getTableName(string $table_name): string
     {
-        return '`' . DB_PREFIX . $tableName . '`';
+        return '`' . DB_PREFIX . $table_name . '`';
     }
 
-    public function getRows(string $tableName, string $where = '', array $values = [], string $orderBy = ''): array
+    public function getRows(string $table_name, string $where = '', array $values = [], string $order_by = ''): array
     {
-        $sql = 'SELECT * FROM ' . $this->getTableName($tableName);
+        $sql = 'SELECT * FROM ' . $this->getTableName($table_name);
         if ($where) $sql .= " WHERE $where";
-        if ($orderBy) $sql .= " ORDER BY $orderBy";
+        if ($order_by) $sql .= " ORDER BY `$order_by`";
         $query = $this->pdo->prepare($sql);
         $query->execute($values);
         return $query->fetchAll();
     }
 
-    public function getRowByWhere(string $tableName, string $where = '', array  $values = [], string $orderBy = ''): array
+    public function getRowByWhere(string $table_name, string $where, array $values = []): array
     {
-        $sql = 'SELECT * FROM ' . $this->getTableName($tableName) . " WHERE $where";
+        $sql = 'SELECT * FROM ' . $this->getTableName($table_name) . " WHERE $where";
         $query = $this->pdo->prepare($sql);
         $query->execute($values);
         $result = $query->fetch();
@@ -56,16 +56,16 @@ class Database
         return [];
     }
 
-    public function getRowById(string $tableName, int $id): array
+    public function getRowById(string $table_name, int $id): array
     {
-        return $this->getRowByWhere($tableName, ' id = ?', [$id]);
+        return $this->getRowByWhere($table_name, '`id` = ?', [$id]);
     }
 
-    public function getRowsByIds(string $tableName, array $ids): array
+    public function getRowsByIds(string $table_name, array $ids): array
     {
         if ($ids) {
             $in = str_repeat('?,', count($ids) - 1) . '?';
-            $sql = 'SELECT * FROM ' . $this->getTableName($tableName) . " WHERE `id` IN ($in)";
+            $sql = 'SELECT * FROM ' . $this->getTableName($table_name) . " WHERE `id` IN ($in)";
             $query = $this->pdo->prepare($sql);
             $query->execute($ids);
             $result = [];
@@ -77,16 +77,16 @@ class Database
         return [];
     }
 
-    public function update(string $tableName, array $fields, array $values, string $where = '', array $whereValues = [])
+    public function update(string $table_name, array $fields, array $values, string $where = '', array $where_values = [])
     {
-        $sql = 'UPDATE ' . $this->getTableName($tableName) . ' SET ';
+        $sql = 'UPDATE ' . $this->getTableName($table_name) . ' SET ';
         foreach ($fields as $field) {
-            $sql .= " `$field` = ?,";
+            $sql .= "`$field` = ?,";
         }
         $sql = substr($sql, 0, -1);
         if ($where) $sql .= " WHERE $where";
         $query = $this->pdo->prepare($sql);
-        $query->execute(array_merge($values), $whereValues);
+        $query->execute(array_merge($values, $where_values));
     }
 
     public function __destruct()
